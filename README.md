@@ -1,6 +1,6 @@
 # Sistem Informasi Manajemen Logistik dan Monitoring Pengiriman Barang Ekspedisi
 
-Project Java berbasis terminal untuk tugas PBO. Dibuat tanpa GUI.
+Project Java berbasis terminal untuk tugas PBO. 
 
 ## Menjalankan di NetBeans
 1. Ekstrak ZIP.

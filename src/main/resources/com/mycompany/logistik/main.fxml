@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="720.0" prefWidth="1180.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.logistik.controller.MainController">
+   <left>
+      <!-- SIDEBAR -->
+      <VBox prefWidth="240.0" spacing="8.0" styleClass="sidebar" BorderPane.alignment="CENTER">
+         <children>
+            <VBox spacing="4.0">
+               <children>
+                  <Label styleClass="sidebar-title" text="SMART ECONOMY" />
+                  <Label styleClass="sidebar-subtitle" text="Sistem Manajemen Logistik" />
+               </children>
+               <padding>
+                  <Insets bottom="20.0" left="10.0" top="10.0" />
+               </padding>
+            </VBox>
+            
+            <Button fx:id="btnNavDashboard" maxWidth="Infinity" onAction="#navKeDashboard" styleClass="nav-button" text="📊  Dashboard" />
+            <Button fx:id="btnNavPelanggan" maxWidth="Infinity" onAction="#navKePelanggan" styleClass="nav-button" text="👥  Data Pelanggan" />
+            <Button fx:id="btnNavKurir" maxWidth="Infinity" onAction="#navKeKurir" styleClass="nav-button" text="🛵  Data Kurir" />
+            <Button fx:id="btnNavPengiriman" maxWidth="Infinity" onAction="#navKePengiriman" styleClass="nav-button" text="📦  Pengiriman Barang" />
+            <Button fx:id="btnNavMonitoring" maxWidth="Infinity" onAction="#navKeMonitoring" styleClass="nav-button" text="🔍  Monitoring Status" />
+            <Button fx:id="btnNavRiwayat" maxWidth="Infinity" onAction="#navKeRiwayat" styleClass="nav-button" text="📜  Riwayat Mutasi" />
+            <Button fx:id="btnNavFileIO" maxWidth="Infinity" onAction="#navKeFileIO" styleClass="nav-button" text="💾  File I/O &amp; Backup" />
+            
+            <Region VBox.vgrow="ALWAYS" />
+            
+            <VBox spacing="4.0" style="-fx-background-color: #1e293b; -fx-padding: 10px; -fx-background-radius: 8px;">
+               <children>
+                  <Label text="Versi 1.0 (PBO Demo)" textFill="#94a3b8" />
+                  <Label text="JavaFX &amp; NetBeans" textFill="#64748b" style="-fx-font-size: 10px;" />
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </left>
+   
+   <center>
+      <BorderPane BorderPane.alignment="CENTER">
+         <top>
+            <!-- TOP HEADER -->
+            <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="top-header" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label fx:id="lblPageTitle" styleClass="page-title" text="Dashboard Ringkasan Ekspedisi" />
+                        <Label fx:id="lblPageDesc" styleClass="page-desc" text="Pantau statistik pengiriman barang ekspedisi" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </top>
+         
+         <center>
+            <!-- STACKPANE FOR DYNAMIC VIEWS -->
+            <StackPane BorderPane.alignment="CENTER">
+               <children>
+                  
+                  <!-- ================= 1. VIEW DASHBOARD ================= -->
+                  <VBox fx:id="paneDashboard" spacing="20.0">
+                     <padding>
+                        <Insets bottom="20.0" left="24.0" right="24.0" top="20.0" />
+                     </padding>
+                     <children>
+                        <!-- Grid Cards Statistik -->
+                        <GridPane hgap="16.0" vgap="16.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="95.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <VBox styleClass="stat-card-total">
+                                 <children>
+                                    <Label styleClass="stat-title" text="TOTAL PENGIRIMAN" />
+                                    <Region VBox.vgrow="ALWAYS" />
+                                    <Label fx:id="lblTotalPengiriman" styleClass="stat-number" text="0" />
+                                 </children>
+                              </VBox>
+                              <VBox styleClass="stat-card-process" GridPane.columnIndex="1">
+                                 <children>
+                                    <Label styleClass="stat-title" text="SEDANG DIPROSES" />
+                                    <Region VBox.vgrow="ALWAYS" />
+                                    <Label fx:id="lblTotalDiproses" styleClass="stat-number" text="0" />
+                                 </children>
+                              </VBox>
+                              <VBox styleClass="stat-card-transit" GridPane.columnIndex="2">
+                                 <children>
+                                    <Label styleClass="stat-title" text="DALAM PENGIRIMAN" />
+                                    <Region VBox.vgrow="ALWAYS" />
+                                    <Label fx:id="lblTotalDikirim" styleClass="stat-number" text="0" />
+                                 </children>
+                              </VBox>
+                              <VBox styleClass="stat-card-delivered" GridPane.columnIndex="3">
+                                 <children>
+                                    <Label styleClass="stat-title" text="SUDAH DITERIMA" />
+                                    <Region VBox.vgrow="ALWAYS" />
+                                    <Label fx:id="lblTotalDiterima" styleClass="stat-number" text="0" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </GridPane>
+                        
+                        <!-- Secondary stats & Summary table -->
+                        <HBox spacing="16.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <VBox spacing="12.0" styleClass="card" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Ringkasan Data Pengiriman Terbaru" />
+                                    <TableView fx:id="tblDashboardPengiriman" VBox.vgrow="ALWAYS">
+                                      <columns>
+                                        <TableColumn fx:id="colDashResi" prefWidth="160.0" text="Nomor Resi" />
+                                        <TableColumn fx:id="colDashBarang" prefWidth="160.0" text="Nama Barang" />
+                                        <TableColumn fx:id="colDashPelanggan" prefWidth="130.0" text="Pelanggan" />
+                                        <TableColumn fx:id="colDashKurir" prefWidth="130.0" text="Kurir" />
+                                        <TableColumn fx:id="colDashStatus" prefWidth="110.0" text="Status" />
+                                      </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </TableView>
+                                 </children>
+                              </VBox>
+                              
+                              <VBox prefWidth="250.0" spacing="16.0" styleClass="card">
+                                 <children>
+                                    <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Entitas Terdaftar" />
+                                    <VBox spacing="4.0" style="-fx-background-color: #f8fafc; -fx-padding: 14px; -fx-background-radius: 8px;">
+                                       <children>
+                                          <Label text="Total Pelanggan Aktif" textFill="#64748b" />
+                                          <Label fx:id="lblTotalPelanggan" style="-fx-font-size: 22px; -fx-font-weight: bold;" text="0" textFill="#0f172a" />
+                                       </children>
+                                    </VBox>
+                                    <VBox spacing="4.0" style="-fx-background-color: #f8fafc; -fx-padding: 14px; -fx-background-radius: 8px;">
+                                       <children>
+                                          <Label text="Total Armada Kurir" textFill="#64748b" />
+                                          <Label fx:id="lblTotalKurir" style="-fx-font-size: 22px; -fx-font-weight: bold;" text="0" textFill="#0f172a" />
+                                       </children>
+                                    </VBox>
+                                    <Region VBox.vgrow="ALWAYS" />
+                                    <Button maxWidth="Infinity" onAction="#navKePengiriman" styleClass="btn-primary" text="+ Buat Pengiriman Baru" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+
+                  <!-- ================= 2. VIEW PELANGGAN ================= -->
+                  <HBox fx:id="panePelanggan" spacing="16.0" visible="false">
+                     <padding>
+                        <Insets bottom="20.0" left="24.0" right="24.0" top="20.0" />
+                     </padding>
+                     <children>
+                        <!-- Form Input Pelanggan -->
+                        <VBox prefWidth="340.0" spacing="12.0" styleClass="card">
+                           <children>
+                              <Label style="-fx-font-weight: bold; -fx-font-size: 15px;" text="Form Data Pelanggan" />
+                              <Separator />
+                              
+                              <Label styleClass="form-label" text="ID Pelanggan *" />
+                              <TextField fx:id="txtPelangganId" promptText="Contoh: PLG-001" />
+                              
+                              <Label styleClass="form-label" text="Nama Lengkap *" />
+                              <TextField fx:id="txtPelangganNama" promptText="Nama pelanggan..." />
+                              
+                              <Label styleClass="form-label" text="Nomor Telepon *" />
+                              <TextField fx:id="txtPelangganTelp" promptText="08123456789..." />
+                              
+                              <Label styleClass="form-label" text="Alamat Lengkap *" />
+                              <TextArea fx:id="txtPelangganAlamat" prefHeight="80.0" promptText="Alamat pengiriman / domisili..." wrapText="true" />
+                              
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <Button maxWidth="Infinity" onAction="#tambahPelanggan" styleClass="btn-primary" text="Tambah" HBox.hgrow="ALWAYS" />
+                                    <Button maxWidth="Infinity" onAction="#editPelanggan" styleClass="btn-warning" text="Perbarui" HBox.hgrow="ALWAYS" />
+                                 </children>
+                              </HBox>
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <Button maxWidth="Infinity" onAction="#hapusPelanggan" styleClass="btn-danger" text="Hapus" HBox.hgrow="ALWAYS" />
+                                    <Button maxWidth="Infinity" onAction="#resetFormPelanggan" styleClass="btn-secondary" text="Reset" HBox.hgrow="ALWAYS" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        
+                        <!-- Tabel Pelanggan -->
+                        <VBox spacing="10.0" styleClass="card" HBox.hgrow="ALWAYS">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                 <children>
+                                    <Label style="-fx-font-weight: bold; -fx-font-size: 15px;" text="Daftar Pelanggan" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <TextField fx:id="txtCariPelanggan" prefWidth="250.0" promptText="🔍 Cari nama / ID / telepon..." />
+                                 </children>
+                              </HBox>
+                              <TableView fx:id="tblPelanggan" VBox.vgrow="ALWAYS">
+                                <columns>
+                                  <TableColumn fx:id="colPelangganId" prefWidth="90.0" text="ID" />
+                                  <TableColumn fx:id="colPelangganNama" prefWidth="160.0" text="Nama Pelanggan" />
+                                  <TableColumn fx:id="colPelangganTelp" prefWidth="130.0" text="No. Telepon" />
+                                  <TableColumn fx:id="colPelangganAlamat" prefWidth="220.0" text="Alamat" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+
+                  <!-- ================= 3. VIEW KURIR ================= -->
+                  <HBox fx:id="paneKurir" spacing="16.0" visible="false">
+                     <padding>
+                        <Insets bottom="20.0" left="24.0" right="24.0" top="20.0" />
+                     </padding>
+                     <children>
+                        <!-- Form Input Kurir -->
+                        <VBox prefWidth="340.0" spacing="12.0" styleClass="card">
+                           <children>
+                              <Label style="-fx-font-weight: bold; -fx-font-size: 15px;" text="Form Data Kurir" />
+                              <Separator />
+                              
+                              <Label styleClass="form-label" text="ID Kurir *" />
+                              <TextField fx:id="txtKurirId" promptText="Contoh: KRR-001" />
+                              
+                              <Label styleClass="form-label" text="Nama Kurir *" />
+                              <TextField fx:id="txtKurirNama" promptText="Nama lengkap kurir..." />
+                              
+                              <Label styleClass="form-label" text="Nomor Telepon *" />
+                              <TextField fx:id="txtKurirTelp" promptText="08139876543..." />
+                              
+                              <Label styleClass="form-label" text="Jenis Kendaraan Operasional" />
+                              <ComboBox fx:id="cmbKurirKendaraan" maxWidth="Infinity" />
+                              
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <Button maxWidth="Infinity" onAction="#tambahKurir" styleClass="btn-primary" text="Tambah" HBox.hgrow="ALWAYS" />
+                                    <Button maxWidth="Infinity" onAction="#editKurir" styleClass="btn-warning" text="Perbarui" HBox.hgrow="ALWAYS" />
+                                 </children>
+                              </HBox>
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <Button maxWidth="Infinity" onAction="#hapusKurir" styleClass="btn-danger" text="Hapus" HBox.hgrow="ALWAYS" />
+                                    <Button maxWidth="Infinity" onAction="#resetFormKurir" styleClass="btn-secondary" text="Reset" HBox.hgrow="ALWAYS" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        
+                        <!-- Tabel Kurir -->
+                        <VBox spacing="10.0" styleClass="card" HBox.hgrow="ALWAYS">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                 <children>
+                                    <Label style="-fx-font-weight: bold; -fx-font-size: 15px;" text="Daftar Armada Kurir" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <TextField fx:id="txtCariKurir" prefWidth="250.0" promptText="🔍 Cari nama / ID / kendaraan..." />
+                                 </children>
+                              </HBox>
+                              <TableView fx:id="tblKurir" VBox.vgrow="ALWAYS">
+                                <columns>
+                                  <TableColumn fx:id="colKurirId" prefWidth="90.0" text="ID" />
+                                  <TableColumn fx:id="colKurirNama" prefWidth="180.0" text="Nama Kurir" />
+                                  <TableColumn fx:id="colKurirTelp" prefWidth="140.0" text="No. Telepon" />
+                                  <TableColumn fx:id="colKurirKendaraan" prefWidth="150.0" text="Kendaraan" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+
+                  <!-- ================= 4. VIEW PENGIRIMAN ================= -->
+                  <HBox fx:id="panePengiriman" spacing="16.0" visible="false">
+                     <padding>
+                        <Insets bottom="20.0" left="24.0" right="24.0" top="20.0" />
+                     </padding>
+                     <children>
+                        <!-- Form Input Pengiriman -->
+                        <VBox prefWidth="360.0" spacing="10.0" styleClass="card">
+                           <children>
+                              <Label style="-fx-font-weight: bold; -fx-font-size: 15px;" text="Form Pengiriman Barang" />
+                              <Separator />
+                              
+                              <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                 <children>
+                                    <VBox HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label styleClass="form-label" text="Nomor Resi (Otomatis/Unik)" />
+                                          <TextField fx:id="txtResi" editable="false" style="-fx-background-color: #f1f5f9;" />
+                                       </children>
+                                    </VBox>
+                                    <Button onAction="#generateNomorResiBaru" styleClass="btn-secondary" text="🔄 Baru" style="-fx-padding: 6px 10px; -fx-margin-top: 15px;" />
+                                 </children>
+                              </HBox>
+                              
+                              <Label styleClass="form-label" text="Pilih Pelanggan *" />
+                              <ComboBox fx:id="cmbPelanggan" maxWidth="Infinity" promptText="-- Pilih Pelanggan --" />
+                              
+                              <Label styleClass="form-label" text="Pilih Kurir Penanggung Jawab *" />
+                              <ComboBox fx:id="cmbKurir" maxWidth="Infinity" promptText="-- Pilih Kurir --" />
+                              
+                              <Label styleClass="form-label" text="Nama Barang / Paket *" />
+                              <TextField fx:id="txtNamaBarang" promptText="Contoh: Paket Pakaian / Alat Elektronik" />
+                              
+                              <Label styleClass="form-label" text="Alamat Tujuan Pengiriman *" />
+                              <TextArea fx:id="txtAlamatTujuan" prefHeight="55.0" promptText="Alamat lengkap penerima..." wrapText="true" />
+                              
+                              <Label styleClass="form-label" text="Tanggal Pengiriman *" />
+                              <DatePicker fx:id="dpTanggalPengiriman" maxWidth="Infinity" />
+                              
+                              <Label styleClass="form-label" text="Catatan Pengiriman (Opsional)" />
+                              <TextField fx:id="txtCatatanPengiriman" promptText="Misal: Fragile, jangan dibanting" />
+                              
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <Button maxWidth="Infinity" onAction="#tambahPengiriman" styleClass="btn-primary" text="Buat Resi" HBox.hgrow="ALWAYS" />
+                                    <Button maxWidth="Infinity" onAction="#editPengiriman" styleClass="btn-warning" text="Perbarui" HBox.hgrow="ALWAYS" />
+                                 </children>
+                              </HBox>
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <Button maxWidth="Infinity" onAction="#hapusPengiriman" styleClass="btn-danger" text="Hapus" HBox.hgrow="ALWAYS" />
+                                    <Button maxWidth="Infinity" onAction="#resetFormPengiriman" styleClass="btn-secondary" text="Reset" HBox.hgrow="ALWAYS" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        
+                        <!-- Tabel Pengiriman -->
+                        <VBox spacing="10.0" styleClass="card" HBox.hgrow="ALWAYS">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                 <children>
+                                    <Label style="-fx-font-weight: bold; -fx-font-size: 15px;" text="Seluruh Data Pengiriman" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <TextField fx:id="txtCariPengiriman" prefWidth="270.0" promptText="🔍 Cari resi / barang / tujuan..." />
+                                 </children>
+                              </HBox>
+                              <TableView fx:id="tblPengiriman" VBox.vgrow="ALWAYS">
+                                <columns>
+                                  <TableColumn fx:id="colKirimResi" prefWidth="140.0" text="Nomor Resi" />
+                                  <TableColumn fx:id="colKirimBarang" prefWidth="130.0" text="Barang" />
+                                  <TableColumn fx:id="colKirimPelanggan" prefWidth="110.0" text="Pelanggan" />
+                                  <TableColumn fx:id="colKirimKurir" prefWidth="100.0" text="Kurir" />
+                                  <TableColumn fx:id="colKirimAlamat" prefWidth="160.0" text="Alamat Tujuan" />
+                                  <TableColumn fx:id="colKirimTanggal" prefWidth="95.0" text="Tanggal" />
+                                  <TableColumn fx:id="colKirimStatus" prefWidth="90.0" text="Status" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+
+                  <!-- ================= 5. VIEW MONITORING ================= -->
+                  <VBox fx:id="paneMonitoring" spacing="16.0" visible="false">
+                     <padding>
+                        <Insets bottom="20.0" left="24.0" right="24.0" top="20.0" />
+                     </padding>
+                     <children>
+                        <!-- Top Filter & Action Bar -->
+                        <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="card">
+                           <children>
+                              <Label style="-fx-font-weight: bold;" text="Filter Status:" />
+                              <ComboBox fx:id="cmbFilterMonitoring" prefWidth="160.0" />
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Label text="Klik salah satu baris di tabel bawah untuk memperbarui status barang" textFill="#64748b" />
+                           </children>
+                        </HBox>
+                        
+                        <HBox spacing="16.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <!-- Tabel Pengiriman Monitoring -->
+                              <VBox spacing="10.0" styleClass="card" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Daftar Pengiriman Dalam Sistem" />
+                                    <TableView fx:id="tblMonitoring" VBox.vgrow="ALWAYS">
+                                      <columns>
+                                        <TableColumn fx:id="colMonResi" prefWidth="160.0" text="Nomor Resi" />
+                                        <TableColumn fx:id="colMonBarang" prefWidth="160.0" text="Barang" />
+                                        <TableColumn fx:id="colMonPelanggan" prefWidth="130.0" text="Pelanggan" />
+                                        <TableColumn fx:id="colMonKurir" prefWidth="130.0" text="Kurir" />
+                                        <TableColumn fx:id="colMonStatus" prefWidth="110.0" text="Status Saat Ini" />
+                                      </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </TableView>
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Panel Update Status -->
+                              <VBox prefWidth="350.0" spacing="14.0" styleClass="card">
+                                 <children>
+                                    <Label style="-fx-font-weight: bold; -fx-font-size: 15px;" text="Perbarui Status Pengiriman" />
+                                    <Separator />
+                                    
+                                    <VBox spacing="4.0" style="-fx-background-color: #f8fafc; -fx-padding: 12px; -fx-background-radius: 8px;">
+                                       <children>
+                                          <Label text="Resi Terpilih:" textFill="#64748b" />
+                                          <Label fx:id="lblMonitorResiTerpilih" style="-fx-font-size: 15px; -fx-font-weight: bold;" text="-" textFill="#1e293b" />
+                                          <Label text="Status Sekarang:" textFill="#64748b" />
+                                          <Label fx:id="lblMonitorStatusSaatIni" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="-" textFill="#2563eb" />
+                                       </children>
+                                    </VBox>
+                                    
+                                    <Label styleClass="form-label" text="Pilih Status Baru:" />
+                                    <ComboBox fx:id="cmbStatusBaru" maxWidth="Infinity" />
+                                    
+                                    <Label styleClass="form-label" text="Keterangan / Catatan Update:" />
+                                    <TextField fx:id="txtKeteranganUpdateStatus" promptText="Contoh: Paket sedang diantar kurir ke alamat" />
+                                    
+                                    <Button maxWidth="Infinity" onAction="#perbaruiStatusPengiriman" styleClass="btn-primary" text="Perbarui Status &amp; Catat Riwayat" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+
+                  <!-- ================= 6. VIEW RIWAYAT ================= -->
+                  <VBox fx:id="paneRiwayat" spacing="14.0" visible="false">
+                     <padding>
+                        <Insets bottom="20.0" left="24.0" right="24.0" top="20.0" />
+                     </padding>
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="card">
+                           <children>
+                              <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Histori Log Status Pengiriman" />
+                              <Region HBox.hgrow="ALWAYS" />
+                              <TextField fx:id="txtCariRiwayat" prefWidth="300.0" promptText="🔍 Filter histori (nomor resi / status / catatan)..." />
+                           </children>
+                        </HBox>
+                        
+                        <VBox styleClass="card" VBox.vgrow="ALWAYS">
+                           <children>
+                              <TableView fx:id="tblRiwayat" VBox.vgrow="ALWAYS">
+                                <columns>
+                                  <TableColumn fx:id="colRiwWaktu" prefWidth="160.0" text="Waktu Perubahan" />
+                                  <TableColumn fx:id="colRiwResi" prefWidth="160.0" text="Nomor Resi" />
+                                  <TableColumn fx:id="colRiwSebelum" prefWidth="130.0" text="Status Sebelumnya" />
+                                  <TableColumn fx:id="colRiwSesudah" prefWidth="130.0" text="Status Terbaru" />
+                                  <TableColumn fx:id="colRiwKet" prefWidth="300.0" text="Keterangan / Catatan Riwayat" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+
+                  <!-- ================= 7. VIEW FILE I/O ================= -->
+                  <VBox fx:id="paneFileIO" spacing="16.0" visible="false">
+                     <padding>
+                        <Insets bottom="20.0" left="24.0" right="24.0" top="20.0" />
+                     </padding>
+                     <children>
+                        <HBox spacing="16.0">
+                           <children>
+                              <!-- Box File I/O Teks -->
+                              <VBox prefWidth="540.0" spacing="12.0" styleClass="card" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label style="-fx-font-weight: bold; -fx-font-size: 15px;" text="📄 File I/O Laporan Teks" />
+                                    <Label text="Menggunakan FileWriter, BufferedWriter, FileReader, dan BufferedReader." textFill="#64748b" />
+                                    <Separator />
+                                    <HBox spacing="10.0">
+                                       <children>
+                                          <Button onAction="#eksporLaporanTeks" styleClass="btn-primary" text="📤 Ekspor Laporan (.txt)" />
+                                          <Button onAction="#bacaLaporanTeks" styleClass="btn-secondary" text="📥 Buka File Teks" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Box Serialization -->
+                              <VBox prefWidth="540.0" spacing="12.0" styleClass="card" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label style="-fx-font-weight: bold; -fx-font-size: 15px;" text="💾 Serialization &amp; Deserialization" />
+                                    <Label text="Menyimpan dan memuat objek biner via ObjectOutputStream &amp; ObjectInputStream." textFill="#64748b" />
+                                    <Separator />
+                                    <HBox spacing="10.0">
+                                       <children>
+                                          <Button onAction="#simpanSerialization" styleClass="btn-success" text="💾 Simpan Objek (.dat)" />
+                                          <Button onAction="#muatDeserialization" styleClass="btn-warning" text="🔄 Muat Objek (.dat)" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        
+                        <!-- Preview Box -->
+                        <VBox spacing="8.0" styleClass="card" VBox.vgrow="ALWAYS">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                 <children>
+                                    <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Pratinjau File / Status File I/O" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <Label fx:id="lblFileStatus" text="Status: Siap" textFill="#2563eb" />
+                                 </children>
+                              </HBox>
+                              <TextArea fx:id="txtAreaFilePreview" editable="false" prefHeight="350.0" promptText="Hasil ekspor laporan atau pembacaan file teks akan ditampilkan di sini..." style="-fx-font-family: 'Courier New', monospace; -fx-font-size: 12px;" VBox.vgrow="ALWAYS" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  
+               </children>
+            </StackPane>
+         </center>
+      </BorderPane>
+   </center>
+</BorderPane>
+

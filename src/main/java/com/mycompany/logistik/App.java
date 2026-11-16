@@ -17,8 +17,11 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        stage.setTitle("Smart Economy: Sistem Informasi Manajemen Logistik & Monitoring Pengiriman");
+        scene = new Scene(loadFXML("main"), 1180, 720);
         stage.setScene(scene);
+        stage.setMinWidth(960);
+        stage.setMinHeight(600);
         stage.show();
     }
 
